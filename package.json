@@ -1,0 +1,24 @@
+{
+  "name": "todo-app-mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run - parallel - filter \"./apps/**\" dev",
+    "build": "pnpm run - recursive - filter \"./apps/**\" build",
+    "test": "pnpm run - recursive - filter \"./apps/**\" test",
+    "lint": "pnpm run - recursive - filter \"./apps/**\" lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.2",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@7.2.5"
+    }
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}
