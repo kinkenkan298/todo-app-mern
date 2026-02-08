@@ -1,6 +1,7 @@
-import express from "express";
-import cors from "cors";
 import { errorHandler } from "@/middleware/error-handler";
+import { todoRoutes } from "@/routes/todo.routes";
+import cors from "cors";
+import express from "express";
 
 const app = express();
 
@@ -10,7 +11,15 @@ app.use(
     extended: true,
   }),
 );
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
+app.use("/api/todos", todoRoutes);
 
 app.use(errorHandler);
 
