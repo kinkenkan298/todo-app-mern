@@ -1,4 +1,3 @@
-import { Badge } from "@/components/selia/badge";
 import { Button } from "@/components/selia/button";
 import {
   Card,
@@ -16,18 +15,10 @@ import {
 } from "@/components/selia/field";
 import { Fieldset } from "@/components/selia/fieldset";
 import { Form } from "@/components/selia/form";
-import { IconBox } from "@/components/selia/icon-box";
 import { Input } from "@/components/selia/input";
-import {
-  Item,
-  ItemAction,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/selia/item";
 import { Stack } from "@/components/selia/stack";
 import { Textarea } from "@/components/selia/textarea";
-import type { Todo } from "@/lib/api";
+import { TodoItem } from "@/components/todo-item";
 import {
   showNotification,
   useCompleteTodo,
@@ -37,113 +28,12 @@ import {
   useTodos,
 } from "@/lib/hooks";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  CheckCircleIcon,
-  Loader2Icon,
-  PlusIcon,
-  TimerIcon,
-  XCircle,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/")({
   component: App,
 });
-
-function formatTimeRemaining(dueAt: string): string {
-  const now = Date.now();
-  const due = new Date(dueAt).getTime();
-  const diff = due - now;
-
-  if (diff <= 0) return "Waktu habis!";
-
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  if (hours > 0) {
-    return `${hours} Jam ${minutes} Menit`;
-  }
-  if (minutes > 0) {
-    return `${minutes} Menit ${seconds} Detik`;
-  }
-  return `${seconds} Detik`;
-}
-
-function TodoItem({
-  todo,
-  onComplete,
-  onDelete,
-  isDeleting,
-  isCompleting,
-}: {
-  todo: Todo;
-  onComplete: () => void;
-  onDelete: () => void;
-  isDeleting: boolean;
-  isCompleting: boolean;
-}) {
-  const [timeRemaining, setTimeRemaining] = useState(() =>
-    formatTimeRemaining(todo.dueAt),
-  );
-  const isOverdue = new Date(todo.dueAt).getTime() <= Date.now();
-
-  useEffect(() => {
-    if (todo.completed) return;
-
-    const interval = setInterval(() => {
-      setTimeRemaining(formatTimeRemaining(todo.dueAt));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [todo.dueAt, todo.completed]);
-
-  return (
-    <Item>
-      <ItemContent>
-        <ItemTitle
-          className={todo.completed ? "line-through text-muted" : undefined}
-        >
-          {todo.name}
-        </ItemTitle>
-        <ItemDescription
-          className={todo.completed ? "line-through text-muted" : undefined}
-        >
-          {todo.description}
-        </ItemDescription>
-
-        {!todo.completed && (
-          <Badge variant={isOverdue ? "danger-outline" : "secondary-outline"}>
-            <TimerIcon />
-            Sisa waktu: {timeRemaining}
-          </Badge>
-        )}
-      </ItemContent>
-      <ItemAction>
-        {!todo.completed && (
-          <IconBox
-            variant="success-subtle"
-            onClick={onComplete}
-            className="cursor-pointer"
-          >
-            {isCompleting ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <CheckCircleIcon />
-            )}
-          </IconBox>
-        )}
-        <IconBox
-          variant="danger-subtle"
-          onClick={onDelete}
-          className="cursor-pointer"
-        >
-          {isDeleting ? <Loader2Icon className="animate-spin" /> : <XCircle />}
-        </IconBox>
-      </ItemAction>
-    </Item>
-  );
-}
 
 function App() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -153,14 +43,12 @@ function App() {
   const deleteTodo = useDeleteTodo();
   const completeTodo = useCompleteTodo();
 
-  // Request notification permission
   useEffect(() => {
     if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
   }, []);
 
-  // Show notifications for due todos
   useEffect(() => {
     if (dueTodos && dueTodos.length > 0) {
       dueTodos.forEach((todo) => {

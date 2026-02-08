@@ -45,8 +45,6 @@ export function useCompleteTodo() {
 }
 
 export function useDueTodos(enabled: boolean = true) {
-  const queryClient = useQueryClient();
-
   return useQuery({
     queryKey: DUE_TODOS_QUERY_KEY,
     queryFn: todoApi.getDue,
@@ -63,4 +61,8 @@ export function showNotification(todo: Todo) {
       icon: "/favicon.ico",
     });
   }
+  const audio = new Audio(
+    "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuByPLTgjMGHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGAg+mdjywnIlBSl+yPDZjTkHHm7A7+OZSA0PVqzn77BdGA==",
+  );
+  audio.play().catch((e) => console.log("Audio play failed:", e));
 }
