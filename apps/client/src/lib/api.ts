@@ -25,13 +25,7 @@ export interface ApiResponse<T> {
 
 export const todoApi = {
   async getAll(): Promise<Todo[]> {
-    const res = await fetch(`${API_BASE_URL}/todos`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:5173",
-        "Access-Control-Allow-Credentials": "true",
-      },
-    });
+    const res = await fetch(`${API_BASE_URL}/todos`);
     const json: ApiResponse<Todo[]> = await res.json();
     if (!json.success) throw new Error(json.message);
     return json.data;
